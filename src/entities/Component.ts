@@ -1,9 +1,14 @@
-import Bike from './Bike'
-import Entity from './Entity'
+import { Entity as TOEntity, Column, ManyToOne } from "typeorm";
+import Bike from "./Bike";
+import Entity from "./Entity";
+import { IsEnum } from "class-validator";
+
+import ComponentFamily from "../enums/ComponentFamily";
+import ComponentType from "../enums/ComponentType";
 
 @TOEntity("components")
-export default class Bike extends Entity {
-  constructor(user: Partial<Bike>) {
+export default class Component extends Entity {
+  constructor(user: Partial<Component>) {
     super();
     Object.assign(this, user);
   }
@@ -11,9 +16,14 @@ export default class Bike extends Entity {
   @Column()
   description: string;
 
-  @Column()
-  type: number;
+  @Column("int")
+  @IsEnum(ComponentFamily)
+  componentFamilyId: number;
 
-  @ManyToOne(() => Bike, (bike) => bike.component)
+  @Column("int")
+  @IsEnum(ComponentType)
+  componentTypeId: ComponentType;
+
+  @ManyToOne(() => Bike, (bike) => bike.components)
   bike: Bike;
 }

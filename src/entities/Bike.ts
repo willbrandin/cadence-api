@@ -1,8 +1,11 @@
-import { Entity as TOEntity, Column, ManyToOne } from "typeorm";
+import { Entity as TOEntity, Column, ManyToOne, OneToMany } from "typeorm";
 
 import User from "./User";
 import Entity from "./Entity";
-import Component from './Component'
+import Component from "./Component";
+
+import BikeType from "../enums/BikeType";
+import { IsEnum } from "class-validator";
 
 @TOEntity("bikes")
 export default class Bike extends Entity {
@@ -18,5 +21,9 @@ export default class Bike extends Entity {
   user: User;
 
   @OneToMany(() => Component, (component) => component.bike)
-  components: Component[]
+  components: Component[];
+
+  @Column("int")
+  @IsEnum(BikeType)
+  bikeTypeId: BikeType;
 }
