@@ -21,6 +21,6 @@ export default class Maintenance extends Entity {
   @ManyToOne(() => Bike, (bike) => bike.maintenances)
   bike: Bike;
 
-  @ManyToOne(() => Component, (component) => component.maintenance)
+  @ManyToOne(() => Component, (component) => component.maintenances)
   component: Component;
 }
