@@ -1,4 +1,4 @@
-import { IsEmail, Length } from "class-validator";
+import { IsEmail, IsNotEmpty, Length } from "class-validator";
 import bcrypt from "bcrypt";
 import {
   Entity as TOEntity,
@@ -6,11 +6,16 @@ import {
   Index,
   BeforeInsert,
   OneToMany,
+  ManyToMany,
+  ManyToOne,
+  JoinTable,
 } from "typeorm";
 
 import { Exclude } from "class-transformer";
 import Entity from "./Entity";
 import Bike from "./Bike";
+import Brand from "./Brand";
+import SubscriptionProduct from "./SubscriptionProduct";
 
 @TOEntity("users")
 export default class User extends Entity {
@@ -26,9 +31,10 @@ export default class User extends Entity {
   email: string;
 
   @Index()
-  @Length(3, 255, { message: "Must be at least 3 characters long" })
-  @Column({ unique: true })
-  username: string;
+  @Length(1, 255, { message: "Must be at least 3 characters long" })
+  @IsNotEmpty()
+  @Column()
+  name: string;
 
   @Exclude()
   @Column()
@@ -42,4 +48,13 @@ export default class User extends Entity {
 
   @OneToMany(() => Bike, (bike) => bike.user)
   bikes: Bike[];
+
+  @ManyToMany(() => Brand, (brand) => brand.user, { nullable: true })
+  @JoinTable()
+  brands: Brand[];
+
+  @ManyToOne(() => SubscriptionProduct, (subscription) => subscription.user, {
+    nullable: true,
+  })
+  subscription: SubscriptionProduct;
 }

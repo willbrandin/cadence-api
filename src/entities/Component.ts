@@ -1,29 +1,53 @@
-import { Entity as TOEntity, Column, ManyToOne } from "typeorm";
+import {
+  Entity as TOEntity,
+  Column,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from "typeorm";
+import { IsEnum } from "class-validator";
+
 import Bike from "./Bike";
 import Entity from "./Entity";
-import { IsEnum } from "class-validator";
+import Maintenance from "./Maintenance";
+import Mileage from "./Mileage";
 
 import ComponentFamily from "../enums/ComponentFamily";
 import ComponentType from "../enums/ComponentType";
+import Brand from "./Brand";
 
 @TOEntity("components")
 export default class Component extends Entity {
-  constructor(user: Partial<Component>) {
+  constructor(component: Partial<Component>) {
     super();
-    Object.assign(this, user);
+    Object.assign(this, component);
   }
 
   @Column()
   description: string;
 
-  @Column("int")
+  @Column()
   @IsEnum(ComponentFamily)
   componentFamilyId: number;
 
-  @Column("int")
+  @Column()
   @IsEnum(ComponentType)
   componentTypeId: ComponentType;
 
+  @Column()
+  addedToBikeDate: Date;
+
   @ManyToOne(() => Bike, (bike) => bike.components)
   bike: Bike;
+
+  @OneToMany(() => Mileage, (mileage) => mileage.component)
+  mileage: Mileage;
+
+  @OneToMany(() => Maintenance, (maintenance) => maintenance.component)
+  maintenances: Maintenance[];
+
+  @ManyToMany(() => Brand, (brand) => brand.component)
+  @JoinTable()
+  brand: Brand;
 }
