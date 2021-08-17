@@ -1,12 +1,12 @@
 import { IsDate } from "class-validator";
 import { Entity as TOEntity, Column, OneToMany } from "typeorm";
 import Entity from "./Entity";
-import User from "./User";
+import Account from "./Account";
 
 @TOEntity("subscription-products")
 export default class SubscriptionProduct extends Entity {
-  @OneToMany(() => User, (user) => user.subscription)
-  user: User;
+  @OneToMany(() => Account, (Account) => Account.subscription)
+  account: Account;
 
   @Column()
   productId: string;

@@ -1,26 +1,23 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import express from "express";
+import express, { urlencoded } from "express";
 import morgan from "morgan";
-// import trim from "./middleware/trim";
+import trim from "./middleware/trim";
 import dotenv from "dotenv";
-import cors from "cors";
+import authRoutes from "./routes/auth";
 
 dotenv.config();
 
-
 const app = express();
 
+// Middleware
 app.use(express.json());
 app.use(morgan("dev"));
-// app.use(trim);
-app.use(
-  cors({
-    credentials: true,
-    origin: process.env.ORIGIN,
-    optionsSuccessStatus: 200,
-  })
-);
+app.use(urlencoded({ extended: true }));
+app.use(trim);
+
+// Routes
+app.use("/api/auth", authRoutes);
 
 const PORT = process.env.PORT;
 

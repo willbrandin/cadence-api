@@ -7,7 +7,7 @@ import {
   JoinTable,
 } from "typeorm";
 
-import User from "./User";
+import Account from "./Account";
 import Entity from "./Entity";
 import Component from "./Component";
 
@@ -28,8 +28,8 @@ export default class Bike extends Entity {
   @Column()
   name: string;
 
-  @ManyToOne(() => User, (user) => user.bikes)
-  user: User;
+  @ManyToOne(() => Account, (account) => account.bikes)
+  account: Account;
 
   @OneToMany(() => Component, (component) => component.bike)
   components: Component[];

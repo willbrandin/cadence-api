@@ -2,7 +2,7 @@ import { Entity as TOEntity, Column, ManyToMany } from "typeorm";
 import Entity from "./Entity";
 import Bike from "./Bike";
 import Component from "./Component";
-import User from "./User";
+import Account from "./Account";
 
 @TOEntity("brands")
 export default class Brand extends Entity {
@@ -17,8 +17,8 @@ export default class Brand extends Entity {
   @Column()
   isComponentOnly: Boolean;
 
-  @ManyToMany(() => User, (user) => user.brands, { nullable: true })
-  user: User;
+  @ManyToMany(() => Account, (account) => account.brands, { nullable: true })
+  account: Account;
 
   @ManyToMany(() => Bike, (bike) => bike.brand, { nullable: true })
   bike: Bike;
