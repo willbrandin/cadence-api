@@ -10,7 +10,6 @@ import {
 import Account from "./Account";
 import Entity from "./Entity";
 import Component from "./Component";
-
 import BikeType from "../enums/BikeType";
 import { IsEnum } from "class-validator";
 import Mileage from "./Mileage";

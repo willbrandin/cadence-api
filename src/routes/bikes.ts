@@ -1,5 +1,4 @@
 import { Request, Response, Router } from "express";
-// import Bike from "../entities/Bike";
 import account from "../middleware/account";
 
 const createBike = async (_: Request, __: Response) => {};

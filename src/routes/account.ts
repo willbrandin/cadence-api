@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 
-const getAccount = (req: Request, res: Response) => {};
-const updateAccount = (req: Request, res: Response) => {};
+const getAccount = (_: Request, __: Response) => {};
+const updateAccount = (_: Request, __: Response) => {};
 
 const router = Router();
 router.get("/", getAccount);

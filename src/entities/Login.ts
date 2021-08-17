@@ -1,5 +1,3 @@
-import { IsEmail, Length } from "class-validator";
-import bcrypt from "bcrypt";
 import {
   Entity as TOEntity,
   Column,
@@ -7,7 +5,8 @@ import {
   BeforeInsert,
   OneToOne,
 } from "typeorm";
-
+import { IsEmail, Length } from "class-validator";
+import bcrypt from "bcrypt";
 import { Exclude } from "class-transformer";
 import Entity from "./Entity";
 import Account from "./Account";
