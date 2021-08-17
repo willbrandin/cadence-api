@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import Login from "../entities/Login";
 import Account from "../entities/Account";
 import jwt from "jsonwebtoken";
 
@@ -9,8 +8,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (!token) return next();
 
     const { email }: any = jwt.verify(token, process.env.JWT_SECRET!);
-    const login = await Login.findOne({ email });
-    const account = await Account.findOne({ login });
+    const account = await Account.findOne({ email });
     res.locals.account = account;
 
     return next();

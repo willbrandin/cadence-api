@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { isEmpty, validate } from "class-validator";
-import Login from "../entities/Login";
+import Account from "../entities/Account";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -29,18 +29,16 @@ const authenticate = async (req: Request, res: Response) => {
       return res.status(400).json(errors);
     }
 
-    const login = await Login.findOne({ email });
-
-    if (!login) return res.status(404).json({ email: "User not found" });
-
-    const passwordMatches = await bcrypt.compare(password, login.password);
+    const account = await Account.findOne({ email });
+    if (!account) return res.status(404).json({ email: "Account not found" });
+    const passwordMatches = await bcrypt.compare(password, account.password);
 
     if (!passwordMatches) {
-      return res.status(404).json({ login: "User not found" });
+      return res.status(404).json({ username: "User not found" });
     }
 
     const token = jwt.sign({ email }, process.env.JWT_SECRET!);
-    return res.json({ login, token });
+    return res.json({ account, token });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error });
@@ -62,25 +60,24 @@ const signUp = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     let errors: any = {};
+    const emailAccount = await Account.findOne({ email });
 
-    const emailUser = await Login.findOne({ email });
-
-    if (emailUser) errors.email = "Email is already taken";
+    if (emailAccount) errors.email = "Email is already taken";
 
     if (Object.keys(errors).length > 0) {
       return res.status(400).json(errors);
     }
 
-    const login = new Login({ email, password });
+    const account = new Account({ email, password });
 
-    errors = await validate(login);
+    errors = await validate(account);
 
     if (errors.length > 0) {
       return res.status(400).json(mapErrors(errors));
     }
 
-    await login.save();
-    return res.json(login).status(201);
+    await account.save();
+    return res.json(account).status(201);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error });
