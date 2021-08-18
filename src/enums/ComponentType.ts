@@ -26,6 +26,7 @@ enum ComponentType {
   Stem,
   Tire,
   Wheel,
+  Other,
 }
 
 function componentGroup(component: ComponentType): ComponentGroup {
