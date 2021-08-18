@@ -7,6 +7,7 @@ import {
   Index,
   Column,
   BeforeInsert,
+  JoinColumn,
 } from "typeorm";
 
 import Entity from "./Entity";
@@ -25,6 +26,9 @@ export default class Account extends Entity {
     Object.assign(this, account);
   }
 
+  @Column({ nullable: true })
+  name: string;
+
   @Index()
   @IsEmail(undefined, { message: "Must be a valid email address" })
   @Length(1, 255, { message: "Email is empty" })
@@ -42,6 +46,7 @@ export default class Account extends Entity {
   }
 
   @OneToMany(() => Bike, (bike) => bike.account, { nullable: true })
+  @JoinColumn({ name: "bikes", referencedColumnName: "bikes" })
   bikes: Bike[];
 
   @ManyToMany(() => Brand, (brand) => brand.account, { nullable: true })

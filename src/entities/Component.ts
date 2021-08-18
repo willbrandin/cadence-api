@@ -12,7 +12,6 @@ import Bike from "./Bike";
 import Entity from "./Entity";
 import Maintenance from "./Maintenance";
 import Mileage from "./Mileage";
-import ComponentFamily from "../enums/ComponentFamily";
 import ComponentType from "../enums/ComponentType";
 import Brand from "./Brand";
 
@@ -25,10 +24,6 @@ export default class Component extends Entity {
 
   @Column()
   description: string;
-
-  @Column()
-  @IsEnum(ComponentFamily)
-  componentFamilyId: number;
 
   @Column()
   @IsEnum(ComponentType)
