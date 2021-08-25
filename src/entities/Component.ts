@@ -14,6 +14,9 @@ import Maintenance from "./Maintenance";
 import Mileage from "./Mileage";
 import ComponentType from "../enums/ComponentType";
 import Brand from "./Brand";
+import { Expose } from "class-transformer";
+import ComponentGroup from "../enums/ComponentGroup";
+import componentGroup from "../enums/ComponentTypeGroup";
 
 @TOEntity("components")
 export default class Component extends Entity {
@@ -44,4 +47,8 @@ export default class Component extends Entity {
   @ManyToMany(() => Brand, (brand) => brand.component)
   @JoinTable()
   brand: Brand;
+
+  @Expose() get componentGroup(): ComponentGroup {
+    return componentGroup(this.componentTypeId);
+  }
 }

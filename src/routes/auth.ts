@@ -3,6 +3,7 @@ import { isEmpty, validate } from "class-validator";
 import Account from "../entities/Account";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import account from "../middleware/account";
 
 const mapErrors = (errors: Object[]) => {
   return errors.reduce((prev: any, error: any) => {
@@ -88,7 +89,32 @@ const signUpWithApple = async (_: Request, res: Response) => {
   return res.status(404).json({ error: "This not work yet my dude" });
 };
 
+const postForgotPassword = async (_: Request, res: Response) => {
+  return res.status(404).json({ error: "This not work yet my dude" });
+};
+
+const postResetPassword = async (_: Request, res: Response) => {
+  try {
+    const { email } = res.locals.account;
+    if (!email) throw new Error("Email required to reset password.");
+
+    const account = Account.findOneOrFail({
+      where: { email },
+    });
+
+    if (!account) throw new Error("Account not found");
+
+    // Nodemailer to account email.
+    return res.status(200).json({ message: "Okay" });
+  } catch (error) {
+    console.log(error);
+    return res.status(404).json({ error });
+  }
+};
+
 const router = Router();
 router.post("/sign-in", authenticate);
 router.post("/sign-up", signUp);
+router.post("/:accountId/reset-password", account, postResetPassword);
+router.post("/forgot-password", postForgotPassword);
 export default router;

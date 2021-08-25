@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const token = req.cookies.token;
+    const token = getToken(req);
     if (!token) return next();
 
     const { email }: any = jwt.verify(token, process.env.JWT_SECRET!);
@@ -15,5 +15,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
   } catch (err) {
     console.log(err);
     return res.status(401).json({ error: "unauthorized" });
+  }
+};
+
+const getToken = (req: Request) => {
+  let authorization = req.headers.authorization;
+  if (authorization && authorization.startsWith("Bearer ")) {
+    return authorization.split("Bearer ")[1];
+  } else {
+    return undefined;
   }
 };
