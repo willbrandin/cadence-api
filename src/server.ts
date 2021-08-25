@@ -4,8 +4,12 @@ import express, { urlencoded } from "express";
 import morgan from "morgan";
 import trim from "./middleware/trim";
 import dotenv from "dotenv";
+// Routes
 import authRoutes from "./routes/auth";
 import bikeRoutes from "./routes/bikes";
+import accountRoutes from "./routes/account";
+import componentRoutes from "./routes/components";
+
 dotenv.config();
 
 const app = express();
@@ -19,6 +23,9 @@ app.use(trim);
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/bikes", bikeRoutes);
+app.use("/api/accounts", accountRoutes);
+app.use("/api/bikes", componentRoutes);
+
 const PORT = process.env.PORT;
 
 app.listen(PORT, async () => {

@@ -108,7 +108,7 @@ const postResetPassword = async (_: Request, res: Response) => {
     return res.status(200).json({ message: "Okay" });
   } catch (error) {
     console.log(error);
-    return res.status(404).json({ error });
+    return res.status(404).json({ error: error.message });
   }
 };
 

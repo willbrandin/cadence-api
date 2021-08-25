@@ -22,9 +22,8 @@ const getBike = async (req: Request, res: Response) => {
   try {
     const bikeId = req.params.bikeId;
     const { id } = res.locals.account;
-    const bike = await Bike.findOne({
+    const bike = await Bike.findOne(bikeId, {
       where: {
-        id: bikeId,
         account: { id },
       },
       relations: [
