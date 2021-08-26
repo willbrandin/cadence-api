@@ -3,9 +3,8 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  ManyToMany,
-  JoinTable,
   OneToOne,
+  JoinColumn,
 } from "typeorm";
 
 import Account from "./Account";
@@ -41,6 +40,7 @@ export default class Bike extends Entity {
   bikeTypeId: BikeType;
 
   @OneToOne(() => Mileage, (mileage) => mileage.bike, { onDelete: "CASCADE" })
+  @JoinColumn()
   mileage: Mileage;
 
   @OneToMany(() => Maintenance, (maintenance) => maintenance.bike, {
@@ -48,8 +48,7 @@ export default class Bike extends Entity {
   })
   maintenances: Maintenance[];
 
-  @ManyToMany(() => Brand, (brand) => brand.bike)
-  @JoinTable()
+  @ManyToOne(() => Brand, (brand) => brand.bike)
   brand: Brand;
 
   @OneToMany(() => Ride, (ride) => ride.bike)

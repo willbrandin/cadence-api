@@ -15,6 +15,7 @@ const getBikeMileage = async (req: Request, res: Response) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
 const getComponentMiles = async (_: Request, __: Response) => {};
 
 const addMileage = async (req: Request, res: Response) => {

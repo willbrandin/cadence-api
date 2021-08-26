@@ -13,7 +13,6 @@ import {
 import Entity from "./Entity";
 import Bike from "./Bike";
 import Brand from "./Brand";
-import SubscriptionProduct from "./SubscriptionProduct";
 import Ride from "./Ride";
 import { IsEmail, Length } from "class-validator";
 import { Exclude } from "class-transformer";
@@ -52,15 +51,6 @@ export default class Account extends Entity {
   @ManyToMany(() => Brand, (brand) => brand.account, { nullable: true })
   @JoinTable()
   brands: Brand[];
-
-  @ManyToOne(
-    () => SubscriptionProduct,
-    (subscription) => subscription.account,
-    {
-      nullable: true,
-    }
-  )
-  subscription: SubscriptionProduct;
 
   @ManyToOne(() => Ride, (ride) => ride.account)
   rides: Ride[];

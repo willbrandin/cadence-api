@@ -4,8 +4,7 @@ import {
   ManyToOne,
   OneToMany,
   OneToOne,
-  ManyToMany,
-  JoinTable,
+  JoinColumn,
 } from "typeorm";
 import { IsEnum } from "class-validator";
 
@@ -40,13 +39,13 @@ export default class Component extends Entity {
   bike: Bike;
 
   @OneToOne(() => Mileage, (mileage) => mileage.component)
+  @JoinColumn()
   mileage: Mileage;
 
   @OneToMany(() => Maintenance, (maintenance) => maintenance.component)
   maintenances: Maintenance[];
 
-  @ManyToMany(() => Brand, (brand) => brand.component)
-  @JoinTable()
+  @ManyToOne(() => Brand, (brand) => brand.component)
   brand: Brand;
 
   @Expose()
