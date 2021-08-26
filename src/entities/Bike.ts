@@ -5,6 +5,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  OneToOne,
 } from "typeorm";
 
 import Account from "./Account";
@@ -30,17 +31,21 @@ export default class Bike extends Entity {
   @ManyToOne(() => Account, (account) => account.bikes)
   account: Account;
 
-  @OneToMany(() => Component, (component) => component.bike)
+  @OneToMany(() => Component, (component) => component.bike, {
+    onDelete: "CASCADE",
+  })
   components: Component[];
 
   @Column("int")
   @IsEnum(BikeType)
   bikeTypeId: BikeType;
 
-  @OneToMany(() => Mileage, (mileage) => mileage.bike)
+  @OneToOne(() => Mileage, (mileage) => mileage.bike, { onDelete: "CASCADE" })
   mileage: Mileage;
 
-  @OneToMany(() => Maintenance, (maintenance) => maintenance.bike)
+  @OneToMany(() => Maintenance, (maintenance) => maintenance.bike, {
+    onDelete: "CASCADE",
+  })
   maintenances: Maintenance[];
 
   @ManyToMany(() => Brand, (brand) => brand.bike)

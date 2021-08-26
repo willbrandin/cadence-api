@@ -1,9 +1,10 @@
-import { Entity as TOEntity, Column, ManyToOne } from "typeorm";
+import { Entity as TOEntity, Column, OneToOne } from "typeorm";
 import Entity from "./Entity";
 import Bike from "./Bike";
 import Component from "./Component";
-import { IsEnum, IsInt } from "class-validator";
+import { IsInt } from "class-validator";
 import MileageStatus from "../enums/MileageStatus";
+import { Expose } from "class-transformer";
 
 @TOEntity("mileage")
 export default class Mileage extends Entity {
@@ -20,13 +21,30 @@ export default class Mileage extends Entity {
   @IsInt()
   recommendedMiles: number;
 
-  @Column()
-  @IsEnum(MileageStatus)
-  status: MileageStatus;
-
-  @ManyToOne(() => Bike, (bike) => bike.mileage)
+  @OneToOne(() => Bike, (bike) => bike.mileage)
   bike: Bike;
 
-  @ManyToOne(() => Component, (component) => component.mileage)
+  @OneToOne(() => Component, (component) => component.mileage)
   component: Component;
+
+  @Expose()
+  get mileageStatusTypeId(): MileageStatus {
+    // Divide miles from recommended.
+    // This describes what percentage the component is in
+    let milesPercent = (this.miles ?? 0 / this.recommendedMiles) * 100;
+    // Floor this to avoid Floating point number
+    let mileageStatusPercent = Math.floor(milesPercent);
+
+    if (mileageStatusPercent > 90) {
+      return MileageStatus.Great;
+    } else if (mileageStatusPercent > 70) {
+      return MileageStatus.Good;
+    } else if (mileageStatusPercent > 50) {
+      return MileageStatus.Okay;
+    } else if (mileageStatusPercent > 30) {
+      return MileageStatus.MaintenanceRecommended;
+    } else {
+      return MileageStatus.MaintenceNeeded;
+    }
+  }
 }

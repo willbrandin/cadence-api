@@ -3,6 +3,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  OneToOne,
   ManyToMany,
   JoinTable,
 } from "typeorm";
@@ -38,7 +39,7 @@ export default class Component extends Entity {
   @ManyToOne(() => Bike, (bike) => bike.components)
   bike: Bike;
 
-  @OneToMany(() => Mileage, (mileage) => mileage.component)
+  @OneToOne(() => Mileage, (mileage) => mileage.component)
   mileage: Mileage;
 
   @OneToMany(() => Maintenance, (maintenance) => maintenance.component)
@@ -48,7 +49,8 @@ export default class Component extends Entity {
   @JoinTable()
   brand: Brand;
 
-  @Expose() get componentGroup(): ComponentGroup {
+  @Expose()
+  get componentGroup(): ComponentGroup {
     return componentGroup(this.componentTypeId);
   }
 }

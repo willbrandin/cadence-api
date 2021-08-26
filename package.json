@@ -38,6 +38,7 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "dev": "concurrently \"npm run server\"  --names server",
     "seed": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
-    "migrate": "typeorm migration:create -n"
+    "migrate": "typeorm migration:create -n",
+    "migration": "typeorm migration:generate -n"
   }
 }

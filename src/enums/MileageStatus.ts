@@ -1,9 +1,9 @@
 enum MileageStatus {
-  great = 1,
-  good,
-  okay,
-  decent,
-  maintenceNeeded,
+  Great = 1,
+  Good,
+  Okay,
+  MaintenanceRecommended,
+  MaintenceNeeded,
 }
 
 export default MileageStatus;
