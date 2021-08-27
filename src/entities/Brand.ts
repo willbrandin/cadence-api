@@ -11,7 +11,7 @@ export default class Brand extends Entity {
     Object.assign(this, brand);
   }
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()
