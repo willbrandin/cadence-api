@@ -7,16 +7,16 @@ const getBikeMileage = async (req: Request, res: Response) => {
   try {
     const { bikeId } = req.params;
     const bike = await Bike.findOneOrFail(bikeId, {
+      where: { account: { id: res.locals.account.id } },
       relations: ["components", "components.mileage", "mileage"],
     });
+
     return res.status(200).json(bike);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };
-
-const getComponentMiles = async (_: Request, __: Response) => {};
 
 const addMileage = async (req: Request, res: Response) => {
   try {
@@ -26,46 +26,39 @@ const addMileage = async (req: Request, res: Response) => {
       relations: ["components", "components.mileage", "mileage"],
     });
     if (!bike.mileage.miles) {
-      bike.mileage.miles = miles;
+      bike.mileage.miles = Number(miles);
     } else {
-      bike.mileage.miles += miles;
+      bike.mileage.miles += Number(miles);
     }
 
-    return addComponentMileage(bike, req, res);
+    bike.components.forEach((component) => {
+      if (!component.mileage.miles) {
+        component.mileage.miles = Number(miles);
+      } else {
+        component.mileage.miles += Number(miles);
+      }
+    });
+
+    await bike.save();
+
+    return res.status(201).json(bike);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });
   }
 };
 
-const addComponentMileage = async (bike: Bike, req: Request, res: Response) => {
-  // 1. Add mileage to the component
-  // 2. Change status on the component
-  // 3. Should component use miles? Are Hours an option?
+const addMilesToComponent = async (req: Request, res: Response) => {
   try {
-    const { bikeId } = req.params;
+    const { componentId } = req.params;
     const { miles } = req.body;
-    const components = await Component.find({
-      where: { bike: { id: bikeId } },
+    const component = await Component.findOneOrFail(componentId, {
+      relations: ["mileage"],
     });
-
-    const promises: Promise<Component>[] = [];
-
-    components.forEach((component) => {
-      if (!component.mileage.miles) {
-        component.mileage.miles = miles;
-      } else {
-        component.mileage.miles += miles;
-      }
-
-      promises.push(component.save());
-    });
-
-    await Promise.all(promises);
-
-    bike.components = components;
-    await bike.save();
-    return res.status(200).json(bike);
+    component.mileage.miles += Number(miles);
+    await component.mileage.save();
+    await component.save();
+    return res.status(201).json(component);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: error.message });
@@ -73,12 +66,8 @@ const addComponentMileage = async (bike: Bike, req: Request, res: Response) => {
 };
 
 const router = Router();
-router.get("/:bikeId/miles", account, getBikeMileage);
-router.get(
-  "/:bikeId/components/:componentId/miles",
-  account,
-  getComponentMiles
-);
-router.post("/:bikeId/miles", account, addMileage);
+router.get("/bikes/:bikeId/miles", account, getBikeMileage);
+router.post("/bikes/:bikeId/miles", account, addMileage);
+router.post("/components/:componentId/miles", account, addMilesToComponent);
 
 export default router;

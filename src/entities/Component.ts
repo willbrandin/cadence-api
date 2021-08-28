@@ -38,14 +38,16 @@ export default class Component extends Entity {
   @ManyToOne(() => Bike, (bike) => bike.components)
   bike: Bike;
 
-  @OneToOne(() => Mileage, (mileage) => mileage.component)
+  @OneToOne(() => Mileage, (mileage) => mileage.component, { cascade: true })
   @JoinColumn()
   mileage: Mileage;
 
-  @OneToMany(() => Maintenance, (maintenance) => maintenance.component)
+  @OneToMany(() => Maintenance, (maintenance) => maintenance.component, {
+    cascade: true,
+  })
   maintenances: Maintenance[];
 
-  @ManyToOne(() => Brand, (brand) => brand.component)
+  @ManyToOne(() => Brand, (brand) => brand.component, { cascade: true })
   brand: Brand;
 
   @Expose()

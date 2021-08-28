@@ -1,4 +1,4 @@
-import { Entity as TOEntity, Column, ManyToMany, OneToMany } from "typeorm";
+import { Entity as TOEntity, Column, OneToMany, ManyToOne } from "typeorm";
 import Entity from "./Entity";
 import Bike from "./Bike";
 import Component from "./Component";
@@ -11,13 +11,13 @@ export default class Brand extends Entity {
     Object.assign(this, brand);
   }
 
-  @Column({ unique: true })
+  @Column()
   name: string;
 
   @Column()
   isComponentOnly: Boolean;
 
-  @ManyToMany(() => Account, (account) => account.brands, { nullable: true })
+  @ManyToOne(() => Account, (account) => account.brands, { nullable: true })
   account: Account;
 
   @OneToMany(() => Bike, (bike) => bike.brand, { nullable: true })

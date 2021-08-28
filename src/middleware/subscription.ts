@@ -13,23 +13,23 @@ Don't worry about subscriptions server side and only use Revenue Cat?
 - Use webhooks to store info in DB? 
 - App -> RC -> Server
 */
-export default async (_: Request, res: Response, next: NextFunction) => {
-  try {
-    const acc = res.locals.account;
-    if (!acc) throw new Error();
+// export default async (_: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const acc = res.locals.account;
+//     if (!acc) throw new Error();
 
-    const account = await Account.findOneOrFail({
-      where: {
-        id: acc.id,
-      },
-      relations: ["subscription"],
-    });
+//     const account = await Account.findOneOrFail({
+//       where: {
+//         id: acc.id,
+//       },
+//       relations: ["subscription"],
+//     });
 
-    if (!account.subscription) throw new Error();
+//     if (!account.subscription) throw new Error();
 
-    return next();
-  } catch (error) {
-    console.log(error);
-    return res.status(401).json({ error: "Subscription needed" });
-  }
-};
+//     return next();
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(401).json({ error: "Subscription needed" });
+//   }
+// };

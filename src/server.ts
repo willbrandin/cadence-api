@@ -9,6 +9,8 @@ import authRoutes from "./routes/auth";
 import bikeRoutes from "./routes/bikes";
 import accountRoutes from "./routes/account";
 import componentRoutes from "./routes/components";
+import mileageRoutes from "./routes/mileage";
+import brandRoutes from "./routes/brands";
 
 dotenv.config();
 
@@ -25,6 +27,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/bikes", bikeRoutes);
 app.use("/api/accounts", accountRoutes);
 app.use("/api/bikes", componentRoutes);
+app.use("/api/brands", brandRoutes);
+app.use("/api", mileageRoutes);
 
 const PORT = process.env.PORT;
 

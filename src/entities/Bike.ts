@@ -32,6 +32,7 @@ export default class Bike extends Entity {
 
   @OneToMany(() => Component, (component) => component.bike, {
     onDelete: "CASCADE",
+    cascade: true,
   })
   components: Component[];
 
@@ -39,16 +40,20 @@ export default class Bike extends Entity {
   @IsEnum(BikeType)
   bikeTypeId: BikeType;
 
-  @OneToOne(() => Mileage, (mileage) => mileage.bike, { onDelete: "CASCADE" })
+  @OneToOne(() => Mileage, (mileage) => mileage.bike, {
+    onDelete: "CASCADE",
+    cascade: true,
+  })
   @JoinColumn()
   mileage: Mileage;
 
   @OneToMany(() => Maintenance, (maintenance) => maintenance.bike, {
     onDelete: "CASCADE",
+    cascade: true,
   })
   maintenances: Maintenance[];
 
-  @ManyToOne(() => Brand, (brand) => brand.bike)
+  @ManyToOne(() => Brand, (brand) => brand.bike, { cascade: true })
   brand: Brand;
 
   @OneToMany(() => Ride, (ride) => ride.bike)

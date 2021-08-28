@@ -97,6 +97,13 @@ export default class CreateData implements Seeder {
           createdAt: timePlus(minute * 20),
           updatedAt: timePlus(minute * 20),
         },
+        {
+          name: "Mongoose",
+          isComponentOnly: false,
+          createdAt: timePlus(minute * 20),
+          updatedAt: timePlus(minute * 20),
+          account: john,
+        },
       ])
       .execute();
 
@@ -271,7 +278,7 @@ export default class CreateData implements Seeder {
 
     bikes.forEach((bike) => {
       const mileage = new Mileage({ miles: 35, recommendedMiles: 500, bike });
-      mileagePromises.push(mileage.save());
+      // mileagePromises.push(mileage.save());
       bike!.mileage = mileage;
       bikePromises.push(bike!.save());
     });
@@ -288,9 +295,9 @@ export default class CreateData implements Seeder {
         recommendedMiles: 250,
         component,
       });
-      componentMileagePromises.push(mileage.save());
-      component!.mileage = mileage;
-      componentPromises.push(component!.save());
+      // componentMileagePromises.push(mileage.save());
+      component.mileage = mileage;
+      componentPromises.push(component.save());
     });
 
     await Promise.all(componentMileagePromises);

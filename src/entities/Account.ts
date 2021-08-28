@@ -1,13 +1,10 @@
 import {
   Entity as TOEntity,
   OneToMany,
-  ManyToMany,
   ManyToOne,
-  JoinTable,
   Index,
   Column,
   BeforeInsert,
-  JoinColumn,
 } from "typeorm";
 
 import Entity from "./Entity";
@@ -45,11 +42,9 @@ export default class Account extends Entity {
   }
 
   @OneToMany(() => Bike, (bike) => bike.account, { nullable: true })
-  @JoinColumn({ name: "bikes", referencedColumnName: "bikes" })
   bikes: Bike[];
 
-  @ManyToMany(() => Brand, (brand) => brand.account, { nullable: true })
-  @JoinTable()
+  @OneToMany(() => Brand, (brand) => brand.account, { nullable: true })
   brands: Brand[];
 
   @ManyToOne(() => Ride, (ride) => ride.account)

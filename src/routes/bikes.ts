@@ -7,21 +7,24 @@ import Brand from "../entities/Brand";
 const createBike = async (req: Request, res: Response) => {
   try {
     const account = res.locals.account;
-    const { name, bikeTypeId, bikeBrand, miles } = req.body;
+    const { name, bikeTypeId, bikeBrandId, recommendedMiles } = req.body;
 
-    const brand = new Brand(bikeBrand);
+    const brand = await Brand.findOneOrFail(bikeBrandId);
+
+    if (brand.isComponentOnly)
+      throw new Error("This is a component only brand.");
 
     const bike = new Bike({ name, bikeTypeId, account, brand });
+
     const mileage = new Mileage({
       miles: 0,
-      recommendedMiles: miles.recommendedMiles,
+      recommendedMiles,
       bike,
     });
-    bike.mileage = mileage;
 
-    await brand.save();
-    await bike.save();
     await mileage.save();
+    bike.mileage = mileage;
+    await bike.save();
 
     return res.status(201).json(bike);
   } catch (error) {
@@ -61,7 +64,6 @@ const getBike = async (req: Request, res: Response) => {
         account: { id },
       },
       relations: [
-        "account",
         "components",
         "components.mileage",
         "components.maintenances",
@@ -81,8 +83,8 @@ const deleteBike = async (_: Request, __: Response) => {};
 
 const router = Router();
 router.get("/", account, getBikes);
-router.get("/:bikeId", account, getBike);
 router.post("/", account, createBike);
+router.get("/:bikeId", account, getBike);
 router.delete("/:bikeId", account, deleteBike);
 
 export default router;
